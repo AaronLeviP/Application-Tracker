@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from './ApplicationForm';
+import ApplicationCard from '../components/ApplicationCard';
 
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
@@ -93,13 +94,48 @@ const Dashboard = () => {
                 <p>Track your job applications and interview process</p>
             </header>
 
-            {error && <div className="erro-message">{error}</div>}
+            {error && <div className="error-message">{error}</div>}
 
             <ApplicationForm
                 onSubmit={editingApplication ? handleUpdate : handleCreate}
                 editingApplication={editingApplication}
                 onCancel={handleCancelEdit}
             />
+
+            <div className="applications-section">
+                <div className="section-header">
+                    <h2>Your Applications ({filteredApplications.length})</h2>
+                    <div className="filter-group">
+                        <label htmlFor="status-filter">Filter by status:</label>
+                        <select
+                            id="status-filter"
+                            value={filterStatus}
+                            onChange={(e) => setFilterStatus(e.target.value)}
+                        >
+                            {statusOptions.map(status => (
+                                <option key={status} value={status}>{status}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {filteredApplications.length === 0 ? (
+                    <p className="no-applications">
+                        No applications found. Add your first application above!
+                    </p>
+                ) : (
+                    <div className="applications-grid">
+                        {filteredApplications.map(application => (
+                            <ApplicationCard
+                                key={application._id}
+                                application={application}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
