@@ -51,7 +51,7 @@ const Dashboard = () => {
 
     const handleUpdate = async (formData) => {
         try {
-            const response = applicationAPI.update(editingApplication._id, formData);
+            const response = await applicationAPI.update(editingApplication._id, formData);
             setApplications(prev => prev.map(app => app._id === editingApplication._id ? response.data : app));
             setEditingApplication(null);
             setError(null);

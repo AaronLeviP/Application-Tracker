@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
     const [formData, setFormData] = useState({
-        company: editingApplication?.company|| '',
-        position: editingApplication?.position || '',
-        status: editingApplication?.status || 'Applied',
-        notes: editingApplication?.notes || '',
-        followUpDate: editingApplication?.followUpDate
-            ? new Date(editingApplication.followUpDate).toISOString().split('T')[0]
-            : ''
+        company: '',
+        position: '',
+        status: 'Applied',
+        notes: '',
+        followUpDate: ''
     });
+
+    useEffect(() => {
+        if (editingApplication) {
+            setFormData({
+                company: editingApplication?.company || '',
+                position: editingApplication?.position || '',
+                status: editingApplication?.status || 'Applied',
+                notes: editingApplication?.notes || '',
+                followUpDate: editingApplication?.followUpDate
+                    ? new Date(editingApplication.followUpDate).toISOString().split('T')[0]
+                    : ''
+            });
+        } else {
+            setFormData({
+                company: '',
+                position: '',
+                status: 'Applied',
+                notes: '',
+                followUpDate: ''
+            });
+        }
+    }, 
+    [editingApplication]); // Update the form whenever we're in edit mode/cancelling edit
 
     const statusOptions = [
         'Applied',
