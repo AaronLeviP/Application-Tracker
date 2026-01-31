@@ -84,9 +84,9 @@ The app will run on `http://localhost:3000`
 - [x] Read applications endpoint
 - [x] Update application endpoint
 - [x] Delete application endpoint
-- [ ] React frontend structure
-- [ ] Application form component
-- [ ] Application list display
+- [x] React frontend structure
+- [x] Application form component
+- [x] Application list display
 
 **Next Steps:**
 - [ ] Add authentication system
