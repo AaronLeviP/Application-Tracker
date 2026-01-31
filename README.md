@@ -109,6 +109,5 @@ The app will run on `http://localhost:3000`
 
 ## Author
 
-Your Name
+Aaron Purnawan
 [LinkedIn](https://www.linkedin.com/in/aaronlevip/) | [GitHub](https://github.com/AaronLeviP)
-```
