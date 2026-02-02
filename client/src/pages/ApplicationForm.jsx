@@ -35,7 +35,7 @@ const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
     const statusOptions = [
         'Applied',
         'Technical Interview', 
-        'Onsiite', 
+        'Onsite', 
         'Offer', 
         'Rejected'
     ];

@@ -14,7 +14,7 @@ const Dashboard = () => {
         'All',
         'Applied',
         'Technical Interview',
-        'Onsiite',
+        'Onsite',
         'Offer',
         'Rejected'
     ];
@@ -89,7 +89,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <header classname="dashboard-header">
+            <header className="dashboard-header">
                 <h1>Interview Prep Tracker</h1>
                 <p>Track your job applications and interview process</p>
             </header>
