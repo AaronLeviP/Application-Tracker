@@ -90,7 +90,7 @@ The app will run on `http://localhost:3000`
 
 **Next Steps:**
 - [ ] Add authentication system
-- [ ] Implement filtering by status
+- [x] Implement filtering by status
 - [ ] Add follow-up date reminders
 - [ ] Deploy to production
 
