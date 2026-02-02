@@ -17,7 +17,7 @@ body {
 }
 
 .dashboard {
-  max-width: 1200px;
+  max-width: 1105px;
   margin: 0 auto;
 }
 
@@ -134,7 +134,7 @@ body {
 /* Applications Section */
 .applications-section {
   margin-top: 40px;
-  padding: 10px;
+  /* padding: 10px; */
 }
 
 .section-header {
