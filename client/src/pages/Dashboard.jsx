@@ -9,6 +9,7 @@ const Dashboard = () => {
     const [error,  setError] = useState(null);
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
+    const [searchKeyword, setSearchKeyword] = useState('');
 
     const statusOptions = [
         'All',
@@ -83,6 +84,16 @@ const Dashboard = () => {
         ? applications
         : applications.filter(app => app.status === filterStatus);
 
+    const searchedApplications = searchKeyword === ''
+        ? filteredApplications
+        : filteredApplications.filter(app => {
+            const searchLower = searchKeyword.toLowerCase();
+            return (
+                app.company.toLowerCase().includes(searchLower) ||
+                app.position.toLowerCase().includes(searchLower)
+            )
+        });
+
     if (loading) {
         return <div className="loading">Loading applications...</div>;
     };
@@ -104,7 +115,16 @@ const Dashboard = () => {
 
             <div className="applications-section">
                 <div className="section-header">
-                    <h2>Your Applications ({filteredApplications.length})</h2>
+                    <h2>Your Applications ({searchedApplications.length})</h2>
+                    <div className="search-filter">
+                        <input
+                            type="text"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                            placeholder="Search for Application"
+                        />
+                    </div>
+
                     <div className="filter-group">
                         <label htmlFor="status-filter">Filter by status:</label>
                         <select
@@ -117,15 +137,19 @@ const Dashboard = () => {
                             ))}
                         </select>
                     </div>
+                    
                 </div>
 
-                {filteredApplications.length === 0 ? (
+                {searchedApplications.length === 0 ? (
                     <p className="no-applications">
-                        No applications found. Add your first application above!
+                        { applications.length === 0 
+                            ? 'No applications found. Add your first application above!'
+                            : `No  applications found match "${searchKeyword}". Try a different search.`
+                        }
                     </p>
                 ) : (
                     <div className="applications-grid">
-                        {filteredApplications.map(application => (
+                        {searchedApplications.map(application => (
                             <ApplicationCard
                                 key={application._id}
                                 application={application}
