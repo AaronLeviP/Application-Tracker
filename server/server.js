@@ -12,10 +12,15 @@ const  PORT  = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-app.use(cors({
-    origin: process.env.CLIENT_URL || 'http:localhost:3000',
-    credentials: true
-}));
+if (process.env.NODE_ENV === 'development'){
+    app.use(cors());
+} else {
+    app.use(cors({
+        origin: process.env.CLIENT_URL || 'http:localhost:3000',
+        credentials: true
+    }));
+}
+
 app.use(express.json());
 
 // Routes
