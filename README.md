@@ -2,7 +2,7 @@
 
 A full-stack web application designed to help job seekers organize and manage their interview pipeline, track application stages, and maintain notes throughout the job search process.
 
-**Live Demo:** [https://application-tracker-0eqd.onrender.com/](https://application-tracker-0eqd.onrender.com/) *(add your actual URL)*  
+**Live Demo:** [https://application-tracker-0eqd.onrender.com/](https://application-tracker-0eqd.onrender.com/)
 **GitHub:** [https://github.com/AaronLeviP/Application-Tracker](https://github.com/AaronLeviP/Application-Tracker)
 
 ---
