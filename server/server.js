@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
 const applicationRoutes = require('./routes/applications');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const  PORT  = process.env.PORT || 5000;
@@ -17,7 +18,9 @@ if (process.env.NODE_ENV === 'development'){
 } else {
     app.use(cors({
         origin: process.env.CLIENT_URL || 'http:localhost:3000',
-        credentials: true
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
     }));
 }
 
@@ -28,6 +31,7 @@ app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is running!' });
 });
 
+app.use('/api/auth', authRoutes);
 app.use('/api/applications', applicationRoutes);
 
 // Safety net for unexpected errors
