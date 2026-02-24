@@ -16,6 +16,15 @@ exports.registerValidation = [
   body('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+    .custom((value) => {
+      if (!/[A-Z]/.test(value)) {
+        throw new Error('Password must contain at least one uppercase letter');
+      }
+      if (!/[0-9]/.test(value)) {
+        throw new Error('Password must contain at least one number');
+      }
+      return true;
+    })
 ];
 
 // Validation rules for login
@@ -28,6 +37,32 @@ exports.loginValidation = [
   
   body('password')
     .notEmpty().withMessage('Password is required')
+];
+
+exports.applicationValidation = [
+  body('company')
+    .trim()
+    .notEmpty().withMessage('Company name is required')
+    .isLength({ min: 1, max: 200 }).withMessage('Company name must be 1-200 characters'),
+  
+  body('position')
+    .trim()
+    .notEmpty().withMessage('Position is required')
+    .isLength({ min: 1, max: 200 }).withMessage('Position must be 1-200 characters'),
+  
+  body('status')
+    .optional()
+    .isIn(['Applied', 'Phone Screen', 'Technical Interview', 'Onsite', 'Offer', 'Rejected'])
+    .withMessage('Invalid status'),
+  
+  body('notes')
+    .optional()
+    .trim()
+    .isLength({ max: 2000 }).withMessage('Notes cannot exceed 2000 characters'),
+  
+  body('followUpDate')
+    .optional()
+    .isISO8601().withMessage('Follow-up date must be a valid date')
 ];
 
 // Middleware to check validation results
