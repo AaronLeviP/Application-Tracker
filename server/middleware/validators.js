@@ -61,7 +61,7 @@ exports.applicationValidation = [
     .isLength({ max: 2000 }).withMessage('Notes cannot exceed 2000 characters'),
   
   body('followUpDate')
-    .optional()
+    .optional({ values: 'falsy' })
     .isISO8601().withMessage('Follow-up date must be a valid date')
 ];
 
