@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ApplicationCard = ({ application, onEdit, onDelete }) => {
     
     const formatDate = (dateString) => {

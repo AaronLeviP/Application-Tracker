@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
@@ -12,7 +12,7 @@ const Dashboard = () => {
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
-    const { user, logout } = useAuth();
+    const { logout } = useAuth();
     const navigate = useNavigate();
 
     const statusOptions = [
