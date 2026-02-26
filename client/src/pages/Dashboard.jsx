@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { applicationAPI } from "../services/api";
-import ApplicationForm from './ApplicationForm';
+import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
@@ -10,6 +12,8 @@ const Dashboard = () => {
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const statusOptions = [
         'All',
@@ -37,6 +41,11 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login)');
     };
 
     const handleCreate = async (formData) => {
@@ -101,8 +110,17 @@ const Dashboard = () => {
     return (
         <div className="dashboard">
             <header className="dashboard-header">
+            <div>
                 <h1>Interview Prep Tracker</h1>
                 <p>Track your job applications and interview process</p>
+            </div>
+
+            <div className="header-actions">
+                <span>Welcome, {user?.name}!</span>
+                <button onClick={handleLogout} className="btn-secondary">
+                    Logout
+                </button>
+            </div>
             </header>
 
             {error && <div className="error-message">{error}</div>}
