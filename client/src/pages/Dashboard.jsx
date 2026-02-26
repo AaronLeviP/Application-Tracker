@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
@@ -12,8 +10,6 @@ const Dashboard = () => {
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
-    const { logout } = useAuth();
-    const navigate = useNavigate();
 
     const statusOptions = [
         'All',
@@ -41,11 +37,6 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login)');
     };
 
     const handleCreate = async (formData) => {
@@ -164,7 +155,7 @@ const Dashboard = () => {
                     <p className="no-applications">
                         { applications.length === 0 
                             ? 'No applications found. Add your first application above!'
-                            : `No  applications found match "${searchKeyword}". Try a different search.`
+                            : `No applications found match "${searchKeyword || filterStatus}". Try a different search.`
                         }
                     </p>
                 ) : (
