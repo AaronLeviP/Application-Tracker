@@ -109,6 +109,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
+            {/* 
             <header className="dashboard-header">
             <div>
                 <h1>Interview Prep Tracker</h1>
@@ -122,6 +123,7 @@ const Dashboard = () => {
                 </button>
             </div>
             </header>
+            */}
 
             {error && <div className="error-message">{error}</div>}
 

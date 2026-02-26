@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import useAuth from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const DashboardLayout = () => {
     const { user, logout } = useAuth();
@@ -32,7 +32,7 @@ const DashboardLayout = () => {
                     </NavLink>
                 </nav>
 
-                <div className="sidebar-footbar">
+                <div className="sidebar-footer">
                     <div className="user-info">
                         <span>{user?.name}</span>
                         <span>{user?.email}</span>
