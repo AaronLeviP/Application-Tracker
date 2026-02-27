@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useRef } from 'react';
+import { createContext, useContext, useState, useRef } from 'react';
 
 const ToastContext = createContext();
 
@@ -6,7 +6,7 @@ export const useToast = () => {
     const context = useContext(ToastContext);
 
     if(!context){
-        throw new Error("Must use useToast within Toast Provider");
+        throw new Error("useToast must be used within ToastProvider");
     }
     return context;
 }
@@ -30,8 +30,8 @@ export const ToastProvider = ({ children }) => {
             clearTimeout(timeoutRefs.current[id]);
             delete timeoutRefs.current[id];
         }
-        
-        setToasts(toasts.filter(toast => toast !== id));
+
+        setToasts(toasts.filter(toast => toast.id !== id));
     };
 
     const pauseToast = (id) => {
@@ -44,7 +44,7 @@ export const ToastProvider = ({ children }) => {
     const resumeToast = (id) => {
         timeoutRefs.current[id] = setTimeout(() => {
             removeToast(id);
-        }, 3000)
+        }, 3000);
     };
 
     const value = {
@@ -69,16 +69,16 @@ export const ToastProvider = ({ children }) => {
 const ToastContainer = ({ toasts, onClose, onPause, onResume }) => {
     return (
         <div className="toast-container">
-            { toasts.map(toast => (
+            {toasts.map((toast) => (
                 <div 
-                    key={toast.id} 
+                    key={toast.id}
                     className={`toast toast-${toast.type}`}
                     onMouseEnter={() => onPause(toast.id)}
                     onMouseLeave={() => onResume(toast.id)}
                 >
                     <span>toast.message</span>
 
-                    <button onClick={() => onClose(toast.id)} className={"toast-cancel"}>
+                    <button onClick={() => onClose(toast.id)} className="toast-cancel">
                         x
                     </button>
                 </div>
