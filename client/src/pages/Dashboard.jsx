@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
+import { useToast } from '../context/ToastContext';
 
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
@@ -10,6 +11,7 @@ const Dashboard = () => {
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
+    const { toastSuccess, toastError } = useToast();
 
     const statusOptions = [
         'All',
@@ -22,31 +24,34 @@ const Dashboard = () => {
 
     // Fetch all applications on component mount
     useEffect( () => {
+        const fetchApplications = async () => {
+            try {
+                setLoading(true);
+                const response = await applicationAPI.getAll();
+                setApplications(response.data);
+                setError(null);
+            } catch (err) {
+                setError('Failed to fetch applications. Please try again.');
+                console.error('Error fetching applications: ', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
         fetchApplications();
     }, []);
 
-    const fetchApplications = async () => {
-        try {
-            setLoading(true);
-            const response = await applicationAPI.getAll();
-            setApplications(response.data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to fetch applications. Please try again.');
-            console.error('Error fetching applications: ', err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleCreate = async (formData) => {
         try {
             const response = await applicationAPI.create(formData);
             setApplications(prev => [response.data, ...prev]);
             setError(null);
+            toastSuccess("Application created successfully!");
         } catch (err) {
             setError('Failed to create application. Please try again.');
             console.error('Error creating application: ', err);
+            toastError("Failed to create application.");
         }
     };
 
@@ -56,8 +61,10 @@ const Dashboard = () => {
             setApplications(prev => prev.map(app => app._id === editingApplication._id ? response.data : app));
             setEditingApplication(null);
             setError(null);
+            toastSuccess("Application updated successfully!");
         } catch (err) {
             setError('Failed to update application:', err);
+            toastError("Failed to update application");
         }
     };
 
@@ -65,9 +72,11 @@ const Dashboard = () => {
         try {
             await applicationAPI.delete(id);
             setApplications(prev => prev.filter(app => app._id !== id));
+            toastSuccess("Application successfully deleted!")
         } catch (err) {
             setError('Faild to delete application. Please try again.');
             console.error('Error deleting application: ', err);
+            toastError("Error deleting application.");
         }
     };
 
