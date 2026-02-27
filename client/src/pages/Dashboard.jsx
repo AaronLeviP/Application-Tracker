@@ -46,10 +46,8 @@ const Dashboard = () => {
         try {
             const response = await applicationAPI.create(formData);
             setApplications(prev => [response.data, ...prev]);
-            setError(null);
             toastSuccess("Application created successfully!");
         } catch (err) {
-            setError('Failed to create application. Please try again.');
             console.error('Error creating application: ', err);
             toastError("Failed to create application.");
         }
@@ -60,10 +58,8 @@ const Dashboard = () => {
             const response = await applicationAPI.update(editingApplication._id, formData);
             setApplications(prev => prev.map(app => app._id === editingApplication._id ? response.data : app));
             setEditingApplication(null);
-            setError(null);
             toastSuccess("Application updated successfully!");
         } catch (err) {
-            setError('Failed to update application:', err);
             toastError("Failed to update application");
         }
     };
@@ -74,7 +70,6 @@ const Dashboard = () => {
             setApplications(prev => prev.filter(app => app._id !== id));
             toastSuccess("Application successfully deleted!")
         } catch (err) {
-            setError('Faild to delete application. Please try again.');
             console.error('Error deleting application: ', err);
             toastError("Error deleting application.");
         }
