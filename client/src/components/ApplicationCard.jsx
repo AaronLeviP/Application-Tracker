@@ -52,9 +52,7 @@ const ApplicationCard = ({ application, onEdit, onDelete }) => {
                 </button>
 
                 <button onClick={() => {
-                    if (window.confirm(`Delete application for ${application.company}?`)) {
-                        onDelete(application._id);
-                    }   
+                    onDelete(application._id);
                 }}
                 className="btn-delete"
                 >

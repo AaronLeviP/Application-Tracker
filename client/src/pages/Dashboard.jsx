@@ -3,6 +3,7 @@ import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
 import { useToast } from '../context/ToastContext';
+import Modal from '../components/Modal';
 
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
@@ -12,6 +13,8 @@ const Dashboard = () => {
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
     const { toastSuccess, toastError } = useToast();
+    const [formModal, setFormModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState({ open: false, appId: null });
 
     const statusOptions = [
         'All',
@@ -47,6 +50,7 @@ const Dashboard = () => {
             const response = await applicationAPI.create(formData);
             setApplications(prev => [response.data, ...prev]);
             toastSuccess("Application created successfully!");
+            setFormModal(false);
         } catch (err) {
             console.error('Error creating application: ', err);
             toastError("Failed to create application.");
@@ -59,25 +63,40 @@ const Dashboard = () => {
             setApplications(prev => prev.map(app => app._id === editingApplication._id ? response.data : app));
             setEditingApplication(null);
             toastSuccess("Application updated successfully!");
+            setFormModal(false);
         } catch (err) {
             toastError("Failed to update application");
         }
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            await applicationAPI.delete(id);
-            setApplications(prev => prev.filter(app => app._id !== id));
+            await applicationAPI.delete(deleteModal.appId);
+            setApplications(prev => prev.filter(app => app._id !== deleteModal.appId));
             toastSuccess("Application successfully deleted!")
+            setDeleteModal({ open: false, appId: null })
         } catch (err) {
             console.error('Error deleting application: ', err);
             toastError("Error deleting application.");
         }
     };
 
+    const confirmDelete = (id) => {
+        setDeleteModal({ open: true, appId: id })
+    };
+
+    const handleAdd = () => {
+        setFormModal(true);
+    }
+
+    const closeFormModal = () => {
+        setEditingApplication(null);
+        setFormModal(false);
+    }
+
     const handleEdit = (application) => {
         setEditingApplication(application);
-        window.scrollTo({ top: 0, behavior: 'smooth'});
+        setFormModal(true);
     };
 
     const handleCancelEdit = () => {
@@ -120,13 +139,10 @@ const Dashboard = () => {
             </header>
             */}
 
+            <button onClick={handleAdd} className="btn-application">Add Application</button>
+
             {error && <div className="error-message">{error}</div>}
 
-            <ApplicationForm
-                onSubmit={editingApplication ? handleUpdate : handleCreate}
-                editingApplication={editingApplication}
-                onCancel={handleCancelEdit}
-            />
 
             <div className="applications-section">
                 <div className="section-header">
@@ -169,14 +185,46 @@ const Dashboard = () => {
                                 key={application._id}
                                 application={application}
                                 onEdit={handleEdit}
-                                onDelete={handleDelete}
+                                onDelete={confirmDelete}
                             />
                         ))}
                     </div>
                 )}
             </div>
+
+            <Modal
+                    isOpen={formModal}
+                    onClose={closeFormModal}
+                    title={`${editingApplication ? "Updating Application" : "Add New Application"}`}
+                >
+                    <ApplicationForm
+                        onSubmit={editingApplication ? handleUpdate : handleCreate}
+                        editingApplication={editingApplication}
+                        onCancel={closeFormModal}
+                    />
+    
+            </Modal>
+
+            <Modal
+                isOpen={deleteModal.open}
+                onClose={() => setDeleteModal({ open: false, appId: null })}
+                title={"Confirm Delete"}
+            >
+                <p>Are you sure you want to delete this application?</p>
+
+                <div className="modal-actions">
+                    <button onClick={() => handleDelete(deleteModal.id)} className="btn-danger">
+                        Delete Application
+                    </button>
+
+                    <button onClick={() => setDeleteModal({ open: false, appId: null })}>
+                        Cancel
+                    </button>
+                </div>
+            </Modal>
         </div>
     )
+
 }
 
 export default Dashboard;

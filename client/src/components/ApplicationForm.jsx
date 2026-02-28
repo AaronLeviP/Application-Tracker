@@ -73,8 +73,6 @@ const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
 
     return (
         <form onSubmit={handleSubmit} className="application-form">
-            <h2>{editingApplication  ? 'Edit Application' : 'Add new Application'}</h2>
-
             <div className="form-group">
                 <label htmlFor="company">Company * </label>
                 <input
@@ -143,11 +141,9 @@ const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
                     {editingApplication ? 'Update' : 'Add'} Application
                 </button>
 
-                {editingApplication && (
-                    <button type="button" onClick={onCancel} className="btn-secondary">
-                        Cancel
-                    </button>
-                )}
+                <button type="button" onClick={onCancel} className="btn-secondary">
+                    Cancel
+                </button>
             </div>
         </form>
     )

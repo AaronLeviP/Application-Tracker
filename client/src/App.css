@@ -45,15 +45,7 @@ body {
 /* Form Styles */
 .application-form {
   background: white;
-  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px  rgba(0, 0, 0, 0.1);
-  margin-bottom: 40px;
-}
-
-.application-form h2 {
-  margin-bottom: 20px;
-  color: #1f2937;
 }
 
 .form-group {
@@ -93,6 +85,24 @@ body {
 
 .form-group textarea {
   resize: vertical;
+}
+
+.btn-application{
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-application:hover {
+  background-color: #2563eb;
 }
 
 .btn-primary,
