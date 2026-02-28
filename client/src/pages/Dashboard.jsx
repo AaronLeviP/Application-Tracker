@@ -99,10 +99,6 @@ const Dashboard = () => {
         setFormModal(true);
     };
 
-    const handleCancelEdit = () => {
-        setEditingApplication(null);
-    };
-
     const filteredApplications = filterStatus === 'All'
         ? applications
         : applications.filter(app => app.status === filterStatus);
