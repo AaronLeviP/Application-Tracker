@@ -494,6 +494,9 @@ body {
 .user-info span {
   display: block;
   font-weight: 500;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .user-info small {
@@ -501,6 +504,10 @@ body {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
   margin-top: 4px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .logout-btn {

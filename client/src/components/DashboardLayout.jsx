@@ -34,7 +34,7 @@ const DashboardLayout = () => {
                 <div className="sidebar-footer">
                     <div className="user-info">
                         <span>{user?.name}</span>
-                        <span>{user?.email}</span>
+                        <small>{user?.email}</small>
                     </div>
 
                     <button onClick={handleLogout} className="logout-btn">
