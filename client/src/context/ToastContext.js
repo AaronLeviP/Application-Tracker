@@ -31,7 +31,15 @@ export const ToastProvider = ({ children }) => {
             delete timeoutRefs.current[id];
         }
 
-        setToasts(toasts.filter(toast => toast.id !== id));
+        setToasts(prev => 
+            prev.map(toast => 
+                toast.id === id ? { ...toast, removing:true } : toast
+            )
+        );
+
+        setTimeout(() => {
+            setToasts(prev => prev.filter(toast => toast.id !== id));
+        }, 300);
     };
 
     const pauseToast = (id) => {
@@ -72,13 +80,13 @@ const ToastContainer = ({ toasts, onClose, onPause, onResume }) => {
             {toasts.map((toast) => (
                 <div 
                     key={toast.id}
-                    className={`toast toast-${toast.type}`}
+                    className={`toast toast-${toast.type} ${toast.removing ? 'removing' : ''}`}
                     onMouseEnter={() => onPause(toast.id)}
                     onMouseLeave={() => onResume(toast.id)}
                 >
-                    <span>toast.message</span>
+                    <span>{toast.message}</span>
 
-                    <button onClick={() => onClose(toast.id)} className="toast-cancel">
+                    <button onClick={() => onClose(toast.id)} className="toast-close">
                         x
                     </button>
                 </div>
