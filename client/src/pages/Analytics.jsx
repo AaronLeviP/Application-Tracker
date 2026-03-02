@@ -90,7 +90,10 @@ const Analytics = () => {
 
     return (
         <div className="analytics-page">
-            <h1>Analytics Dashboard</h1>
+            <div className="analytics-header">
+                <h1>Analytics Dashboard</h1>
+                <p>View a statistical overview of your application process!</p>
+            </div>
 
             <LoadingBoundary
                 loading={loading}

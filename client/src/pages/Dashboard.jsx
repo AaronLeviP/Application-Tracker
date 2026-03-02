@@ -124,7 +124,7 @@ const Dashboard = () => {
             <header className="dashboard-header">
                 <div>
                     <h1>Interview Prep Tracker</h1>
-                    <p>Track your job applications and interview process</p>
+                    <p>Track your job applications and interview process!</p>
                 </div>
             </header>
             
