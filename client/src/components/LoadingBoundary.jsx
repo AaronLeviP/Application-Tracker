@@ -1,10 +1,10 @@
 const LoadingBoundary = ({
     loading,
     error,
-    data,
+    // data,
     loadingComponent = <div className="loading">Loading...</div>,
     errorComponent = null,
-    emptyComponent = <div className="empty-state">No data found</div>,
+    // emptyComponent = <div className="empty-state">No data found</div>,
     children
 }) => {
     // Loading state
@@ -21,10 +21,10 @@ const LoadingBoundary = ({
         );
     }
 
-    // Empty state
-    if(!data || ((Array.isArray(data) && data.length === 0))) {
-        return emptyComponent;
-    }
+    // // Empty state
+    // if(!data || ((Array.isArray(data) && data.length === 0))) {
+    //     return emptyComponent;
+    // }
 
     return children;
 }
