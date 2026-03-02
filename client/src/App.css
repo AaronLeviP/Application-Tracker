@@ -788,3 +788,42 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  color: #991b1b;
+}
+
+.error-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #6b7280;
+}
+
+.empty-state h3 {
+  margin: 0 0 10px 0;
+  color: #374151;
+}
+
+.empty-state p {
+  margin: 0 0 20px 0;
+}
