@@ -111,9 +111,13 @@
   --font-bold:     700;
   --font-black:    800;
 
+  /* --- Easing --- */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+
   /* --- Transitions --- */
-  --transition-base: all 0.2s ease;
-  --transition-slow: all 0.3s ease;
+  --transition-base: all 0.18s var(--ease-out-quart);
+  --transition-slow: all 0.3s  var(--ease-out-quart);
 
   /* --- Layout --- */
   --sidebar-width: 250px;
@@ -176,6 +180,7 @@ body {
   box-shadow: var(--shadow-sm);
   border-top: 3px solid var(--color-primary);
   overflow: hidden;
+  animation: fadeInUp 0.4s var(--ease-out-quart) backwards;
 }
 
 .dashboard-header {
@@ -269,11 +274,12 @@ body {
   font-weight: var(--font-medium);
 }
 
-/* Error-bordered field */
+/* Error-bordered field + shake on first invalid */
 .form-group input[aria-invalid="true"],
 .form-group textarea[aria-invalid="true"] {
   border-color: var(--color-error);
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  animation: shake 0.4s var(--ease-out-quart) both;
 }
 
 
@@ -293,6 +299,14 @@ body {
   cursor: pointer;
   transition: var(--transition-base);
   font-family: var(--font-family);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active,
+.btn-edit:active,
+.btn-delete:active {
+  transform: scale(0.96);
 }
 
 /* Modifier: full-width button. Use alongside btn-primary. */
@@ -410,6 +424,7 @@ body {
 
 .search-filter input {
   padding: var(--space-2) var(--space-3);
+  margin: 0 var(--space-8);
   width: 100%;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
@@ -456,7 +471,20 @@ body {
   border-left: 4px solid transparent;
   display: flex;
   flex-direction: column;
+  animation: fadeInUp 0.35s var(--ease-out-quart) backwards;
 }
+
+/* Stagger each card slightly for a cascading reveal */
+.application-card:nth-child(1)  { animation-delay: 0ms; }
+.application-card:nth-child(2)  { animation-delay: 40ms; }
+.application-card:nth-child(3)  { animation-delay: 80ms; }
+.application-card:nth-child(4)  { animation-delay: 120ms; }
+.application-card:nth-child(5)  { animation-delay: 160ms; }
+.application-card:nth-child(6)  { animation-delay: 200ms; }
+.application-card:nth-child(7)  { animation-delay: 240ms; }
+.application-card:nth-child(8)  { animation-delay: 280ms; }
+.application-card:nth-child(9)  { animation-delay: 320ms; }
+.application-card:nth-child(10) { animation-delay: 360ms; }
 
 .application-card:hover {
   transform: translateY(-3px);
@@ -823,7 +851,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.3s var(--ease-out-expo) both;
 }
 
 @keyframes slideIn {
@@ -858,7 +886,7 @@ body {
 }
 
 .toast.removing {
-  animation: slideOut 0.3s ease-in forwards;
+  animation: slideOut 0.22s var(--ease-out-quart) forwards;
 }
 
 
@@ -877,6 +905,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 10000;
+  animation: fadeIn 0.2s var(--ease-out-quart) backwards;
 }
 
 .modal-content {
@@ -887,6 +916,7 @@ body {
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
+  animation: scaleIn 0.28s var(--ease-out-expo) backwards;
 }
 
 .modal-header {
@@ -960,7 +990,13 @@ body {
   gap: var(--space-5);
   align-items: center;
   transition: var(--transition-base);
+  animation: fadeInUp 0.35s var(--ease-out-quart) backwards;
 }
+
+.stat-card:nth-child(1) { animation-delay: 0ms; }
+.stat-card:nth-child(2) { animation-delay: 60ms; }
+.stat-card:nth-child(3) { animation-delay: 120ms; }
+.stat-card:nth-child(4) { animation-delay: 180ms; }
 
 .stat-card:hover {
   transform: translateY(-3px);
@@ -1120,6 +1156,38 @@ body {
   font-weight: var(--font-bold);
   color: var(--color-text-primary);
   font-size: var(--text-lg);
+}
+
+
+/* ============================================
+   KEYFRAMES
+   ============================================ */
+
+/* Entrance: fade up from slightly below */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Entrance: simple opacity only */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Modal content: slide up + subtle scale */
+@keyframes scaleIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* Validation: horizontal shake for invalid fields */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
 }
 
 
