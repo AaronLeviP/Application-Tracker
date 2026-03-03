@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
@@ -20,30 +20,30 @@ const Dashboard = () => {
     const statusOptions = [
         'All',
         'Applied',
+        'Phone Screen',
         'Technical Interview',
         'Onsite',
         'Offer',
         'Rejected'
     ];
 
-    // Fetch all applications on component mount
-    useEffect(() => {
-        const fetchApplications = async () => {
-            try {
-                setLoading(true);
-                const response = await applicationAPI.getAll();
-                setApplications(response.data);
-                setError(null);
-            } catch (err) {
-                setError('Failed to fetch applications. Please try again.');
-                console.error('Error fetching applications: ', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchApplications();
+    const fetchApplications = useCallback(async () => {
+        try {
+            setLoading(true);
+            const response = await applicationAPI.getAll();
+            setApplications(response.data);
+            setError(null);
+        } catch (err) {
+            setError('Failed to fetch applications. Please try again.');
+            console.error('Error fetching applications: ', err);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchApplications();
+    }, [fetchApplications]);
 
     const handleCreate = async (formData) => {
         try {
@@ -129,6 +129,7 @@ const Dashboard = () => {
             <LoadingBoundary
                 loading={loading}
                 error={error}
+                onRetry={fetchApplications}
             >
                 <button onClick={handleAdd} className="btn-primary btn-block">
                     Add Application
@@ -136,7 +137,7 @@ const Dashboard = () => {
 
                 <div className="applications-section">
                     <div className="section-header">
-                        <h2>Your Applications ({searchedApplications.length})</h2>
+                        <h2>Your Applications <span className="section-count">{searchedApplications.length}</span></h2>
                         <div className="search-filter">
                             <input
                                 type="text"

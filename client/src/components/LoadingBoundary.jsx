@@ -1,6 +1,7 @@
 const LoadingBoundary = ({
     loading,
     error,
+    onRetry,
     // data,
     loadingComponent = <div className="loading">Loading...</div>,
     errorComponent = null,
@@ -17,6 +18,11 @@ const LoadingBoundary = ({
         return errorComponent || (
             <div className="error-state">
                 <p>{error}</p>
+                {onRetry && (
+                    <button onClick={onRetry} className="btn-secondary retry-btn">
+                        Try again
+                    </button>
+                )}
             </div>
         );
     }
