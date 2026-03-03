@@ -454,6 +454,8 @@ body {
   box-shadow: var(--shadow-sm);
   transition: var(--transition-base);
   border-left: 4px solid transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 .application-card:hover {
@@ -538,6 +540,7 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-4);
+  margin-top: auto;
 }
 
 

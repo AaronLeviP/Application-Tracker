@@ -38,12 +38,10 @@ const ApplicationCard = ({ application, onEdit, onDelete }) => {
                 <p><strong>Follow-up:</strong> {formatDate(application.followUpDate)}</p>
             </div>
 
-            {application.notes && (
-                <div className="card-notes">
-                    <strong>Notes:</strong>
-                    <p>{application.notes}</p>
-                </div>
-            )}
+            <div className="card-notes">
+                <strong>Notes:</strong>
+                <p>{application.notes || 'No Notes'}</p>
+            </div>
 
             <div className="card-actions">
                 <button onClick={() => onEdit(application)} className="btn-edit">
