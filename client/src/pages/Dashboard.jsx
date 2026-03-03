@@ -9,7 +9,7 @@ import Modal from '../components/Modal';
 const Dashboard = () => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error,  setError] = useState(null);
+    const [error, setError] = useState(null);
     const [editingApplication, setEditingApplication] = useState(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -27,7 +27,7 @@ const Dashboard = () => {
     ];
 
     // Fetch all applications on component mount
-    useEffect( () => {
+    useEffect(() => {
         const fetchApplications = async () => {
             try {
                 setLoading(true);
@@ -41,10 +41,9 @@ const Dashboard = () => {
                 setLoading(false);
             }
         };
-        
+
         fetchApplications();
     }, []);
-
 
     const handleCreate = async (formData) => {
         try {
@@ -61,7 +60,9 @@ const Dashboard = () => {
     const handleUpdate = async (formData) => {
         try {
             const response = await applicationAPI.update(editingApplication._id, formData);
-            setApplications(prev => prev.map(app => app._id === editingApplication._id ? response.data : app));
+            setApplications(prev => prev.map(app =>
+                app._id === editingApplication._id ? response.data : app
+            ));
             setEditingApplication(null);
             toastSuccess("Application updated successfully!");
             setFormModal(false);
@@ -74,8 +75,8 @@ const Dashboard = () => {
         try {
             await applicationAPI.delete(deleteModal.appId);
             setApplications(prev => prev.filter(app => app._id !== deleteModal.appId));
-            toastSuccess("Application successfully deleted!")
-            setDeleteModal({ open: false, appId: null })
+            toastSuccess("Application successfully deleted!");
+            setDeleteModal({ open: false, appId: null });
         } catch (err) {
             console.error('Error deleting application: ', err);
             toastError("Error deleting application.");
@@ -83,17 +84,17 @@ const Dashboard = () => {
     };
 
     const confirmDelete = (id) => {
-        setDeleteModal({ open: true, appId: id })
+        setDeleteModal({ open: true, appId: id });
     };
 
     const handleAdd = () => {
         setFormModal(true);
-    }
+    };
 
     const closeFormModal = () => {
         setEditingApplication(null);
         setFormModal(false);
-    }
+    };
 
     const handleEdit = (application) => {
         setEditingApplication(application);
@@ -111,31 +112,27 @@ const Dashboard = () => {
             return (
                 app.company.toLowerCase().includes(searchLower) ||
                 app.position.toLowerCase().includes(searchLower)
-            )
+            );
         });
-
-    if (loading) {
-        return <div className="loading">Loading applications...</div>;
-    };
 
     return (
         <div className="dashboard">
-            
+
             <header className="dashboard-header">
                 <div>
                     <h1>Interview Prep Tracker</h1>
                     <p>Track your job applications and interview process!</p>
                 </div>
             </header>
-            
-            <LoadingBoundary 
+
+            {/* LoadingBoundary is the sole handler for loading and error states */}
+            <LoadingBoundary
                 loading={loading}
                 error={error}
             >
-                <button onClick={handleAdd} className="btn-application">Add Application</button>
-
-                {/* {error && <div className="error-message">{error}</div>} */}
-
+                <button onClick={handleAdd} className="btn-primary btn-block">
+                    Add Application
+                </button>
 
                 <div className="applications-section">
                     <div className="section-header">
@@ -143,9 +140,10 @@ const Dashboard = () => {
                         <div className="search-filter">
                             <input
                                 type="text"
+                                aria-label="Search applications"
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
-                                placeholder="Search for Application"
+                                placeholder="Search by company or position"
                             />
                         </div>
 
@@ -161,14 +159,13 @@ const Dashboard = () => {
                                 ))}
                             </select>
                         </div>
-                        
                     </div>
 
                     {searchedApplications.length === 0 ? (
                         <p className="no-applications">
-                            { applications.length === 0 
+                            {applications.length === 0
                                 ? 'No applications found. Add your first application above!'
-                                : `No applications found match "${searchKeyword || filterStatus}". Try a different search.`
+                                : `No applications match "${searchKeyword || filterStatus}". Try a different search.`
                             }
                         </p>
                     ) : (
@@ -185,24 +182,22 @@ const Dashboard = () => {
                     )}
                 </div>
 
-
                 <Modal
-                        isOpen={formModal}
-                        onClose={closeFormModal}
-                        title={`${editingApplication ? "Updating Application" : "Add New Application"}`}
-                    >
-                        <ApplicationForm
-                            onSubmit={editingApplication ? handleUpdate : handleCreate}
-                            editingApplication={editingApplication}
-                            onCancel={closeFormModal}
-                        />
-        
+                    isOpen={formModal}
+                    onClose={closeFormModal}
+                    title={editingApplication ? "Update Application" : "Add New Application"}
+                >
+                    <ApplicationForm
+                        onSubmit={editingApplication ? handleUpdate : handleCreate}
+                        editingApplication={editingApplication}
+                        onCancel={closeFormModal}
+                    />
                 </Modal>
 
                 <Modal
                     isOpen={deleteModal.open}
                     onClose={() => setDeleteModal({ open: false, appId: null })}
-                    title={"Confirm Delete"}
+                    title="Confirm Delete"
                 >
                     <p>Are you sure you want to delete this application?</p>
 
@@ -210,16 +205,17 @@ const Dashboard = () => {
                         <button onClick={handleDelete} className="btn-danger">
                             Delete Application
                         </button>
-
-                        <button onClick={() => setDeleteModal({ open: false, appId: null })}>
+                        <button
+                            onClick={() => setDeleteModal({ open: false, appId: null })}
+                            className="btn-secondary"
+                        >
                             Cancel
                         </button>
                     </div>
                 </Modal>
             </LoadingBoundary>
         </div>
-    )
-
-}
+    );
+};
 
 export default Dashboard;

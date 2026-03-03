@@ -1,5 +1,5 @@
 const ApplicationCard = ({ application, onEdit, onDelete }) => {
-    
+
     const formatDate = (dateString) => {
         if (!dateString) return 'Not set';
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -7,27 +7,26 @@ const ApplicationCard = ({ application, onEdit, onDelete }) => {
             month: 'short',
             day: 'numeric'
         });
-    }
+    };
 
-    const getStatusColor = (status) => {
-        const colors = {
-            'Applied': '#3b82f6',
-            'Technical Interview': '#f59e0b',
-            'Onsite': '#10b981',
-            'Offer': '#22c55e',
-            'Rejected': '#ef4444'
+    // Maps status string to a CSS class defined in App.css with WCAG-compliant contrast
+    const getStatusClass = (status) => {
+        const classes = {
+            'Applied':             'status-applied',
+            'Technical Interview': 'status-technical-interview',
+            'Onsite':              'status-onsite',
+            'Offer':               'status-offer',
+            'Rejected':            'status-rejected',
+            'Phone Screen':        'status-phone-screen',
         };
-        return colors[status] || '#6b7280'
+        return classes[status] || 'status-default';
     };
 
     return (
         <div className="application-card">
             <div className="card-header">
                 <h3>{application.company}</h3>
-                <span
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(application.status) }}
-                >
+                <span className={`status-badge ${getStatusClass(application.status)}`}>
                     {application.status}
                 </span>
             </div>
@@ -50,18 +49,12 @@ const ApplicationCard = ({ application, onEdit, onDelete }) => {
                 <button onClick={() => onEdit(application)} className="btn-edit">
                     Edit
                 </button>
-
-                <button onClick={() => {
-                    onDelete(application._id);
-                }}
-                className="btn-delete"
-                >
+                <button onClick={() => onDelete(application._id)} className="btn-delete">
                     Delete
                 </button>
-
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ApplicationCard
+export default ApplicationCard;

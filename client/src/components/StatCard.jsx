@@ -1,7 +1,7 @@
-const StatCard = ({ title, value, icon, color ='#3b82f6 '}) => {
+const StatCard = ({ title, value, icon, color = '#3b82f6' }) => {
     return (
         <div className="stat-card">
-            <div className="stat-icon" style={{ color }}>
+            <div className="stat-icon" aria-hidden="true" style={{ color }}>
                 {icon}
             </div>
 
