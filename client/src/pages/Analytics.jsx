@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { applicationAPI } from "../services/api";
 import LoadingBoundary from '../components/LoadingBoundary';
 import StatCard from "../components/StatCard";
@@ -118,9 +119,18 @@ const Analytics = () => {
 
             <LoadingBoundary loading={loading} error={error}>
                 {applications.length === 0 ? (
-                    <p className="no-applications">
-                        No applications yet. Add your first one from the Dashboard!
-                    </p>
+                    <div className="empty-state">
+                        <div className="empty-state-illustration" aria-hidden="true">
+                            <TrendIcon />
+                        </div>
+                        <h2 className="empty-state-title">Nothing to analyze yet</h2>
+                        <p className="empty-state-description">
+                            Your statistics, charts, and response rates will appear here once you start tracking applications.
+                        </p>
+                        <Link to="/dashboard" className="btn-primary">
+                            Go add your first application
+                        </Link>
+                    </div>
                 ) : (
                     <div className="analytics-content">
 
