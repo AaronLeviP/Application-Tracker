@@ -26,9 +26,9 @@ const DashboardLayout = () => {
                         Analytics
                     </NavLink>
 
-                    <NavLink to="/dashboard/settings" className="nav-item">
+                    {/* <NavLink to="/dashboard/settings" className="nav-item">
                         Settings
-                    </NavLink>
+                    </NavLink> */}
                 </nav>
 
                 <div className="sidebar-footer">

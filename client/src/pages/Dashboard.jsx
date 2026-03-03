@@ -207,7 +207,7 @@ const Dashboard = () => {
                     <p>Are you sure you want to delete this application?</p>
 
                     <div className="modal-actions">
-                        <button onClick={() => handleDelete(deleteModal.id)} className="btn-danger">
+                        <button onClick={handleDelete} className="btn-danger">
                             Delete Application
                         </button>
 

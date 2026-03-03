@@ -63,7 +63,7 @@ const Analytics = () => {
                 year: 'numeric'
             });
     
-            acc[month] = (app[month] || 0) + 1;
+            acc[month] = (acc[month] || 0) + 1;
             return acc;
         }, {});
     

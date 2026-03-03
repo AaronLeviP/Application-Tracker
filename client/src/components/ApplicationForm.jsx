@@ -132,7 +132,7 @@ const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
                     value={formData.notes}
                     onChange={handleChange}
                     placeholder="Add any notes about this application..."
-                    rowes="4"
+                    rows="4"
                 />
             </div>
 
