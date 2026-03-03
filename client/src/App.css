@@ -93,8 +93,7 @@
   --shadow-focus: 0 0 0 3px var(--color-primary-muted);
 
   /* --- Typography --- */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --text-xs:   0.75rem;   /* 12px */
   --text-sm:   0.875rem;  /* 14px */
@@ -104,11 +103,13 @@
   --text-2xl:  1.5rem;    /* 24px */
   --text-3xl:  2rem;      /* 32px */
   --text-4xl:  2.5rem;    /* 40px */
+  --text-5xl:  3.5rem;    /* 56px — display headings */
 
   --font-normal:   400;
   --font-medium:   500;
   --font-semibold: 600;
   --font-bold:     700;
+  --font-black:    800;
 
   /* --- Transitions --- */
   --transition-base: all 0.2s ease;
@@ -184,14 +185,17 @@ body {
 .dashboard-header h1,
 .analytics-header h1 {
   font-size: var(--text-4xl);
+  font-weight: var(--font-black);
   color: var(--color-text-primary);
   margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
 }
 
 .dashboard-header p,
 .analytics-header p {
   color: var(--color-text-secondary);
   font-size: var(--text-lg);
+  font-weight: var(--font-normal);
 }
 
 .header-actions {
@@ -289,6 +293,15 @@ body {
 
 .btn-primary:hover {
   background-color: var(--color-primary-dark);
+}
+
+/* Full-width primary CTA gets more visual weight */
+.btn-primary.btn-block {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-md);
 }
 
 .btn-secondary {
@@ -408,12 +421,21 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   transition: var(--transition-base);
+  border-left: 4px solid transparent;
 }
 
 .application-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
+
+/* Status-colored left border — status is a first-class visual signal */
+.application-card[data-status="Applied"]             { border-left-color: var(--status-applied-bg); }
+.application-card[data-status="Technical Interview"] { border-left-color: var(--status-interview-bg); }
+.application-card[data-status="Onsite"]              { border-left-color: var(--status-onsite-bg); }
+.application-card[data-status="Offer"]               { border-left-color: var(--status-offer-bg); }
+.application-card[data-status="Rejected"]            { border-left-color: var(--status-rejected-bg); }
+.application-card[data-status="Phone Screen"]        { border-left-color: var(--status-phone-bg); }
 
 .card-header {
   display: flex;
@@ -425,8 +447,10 @@ body {
 
 .card-header h3 {
   font-size: var(--text-xl);
+  font-weight: var(--font-bold);
   color: var(--color-text-primary);
   flex: 1;
+  letter-spacing: -0.01em;
 }
 
 .status-badge {
@@ -640,24 +664,29 @@ body {
 
 .sidebar-header h2 {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
+  font-weight: var(--font-black);
   color: var(--color-sidebar-text-active);
+  letter-spacing: -0.01em;
 }
 
 /* Navigation */
 .sidebar-nav {
   flex: 1;
-  padding: var(--space-5) 0;
+  padding: var(--space-3) var(--space-3);
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-3) var(--space-4);
   color: var(--color-sidebar-text);
   text-decoration: none;
   transition: var(--transition-base);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-medium);
+  margin-bottom: var(--space-1);
 }
 
 .nav-item:hover {
@@ -665,10 +694,11 @@ body {
   color: var(--color-sidebar-text-active);
 }
 
+/* White pill — clearly selected, no ambiguity */
 .nav-item.active {
-  background: var(--color-sidebar-active-bg);
-  color: var(--color-sidebar-text-active);
-  border-left: 3px solid var(--color-primary);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-sidebar-bg);
+  font-weight: var(--font-semibold);
 }
 
 /* Sidebar Footer */
@@ -880,19 +910,25 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-5);
   align-items: center;
   transition: var(--transition-base);
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
 
-.stat-icon {
-  font-size: 2.5rem;
-  line-height: 1;
+/* Colored icon square — replaces emoji */
+.stat-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .stat-content {
@@ -902,18 +938,18 @@ body {
 .stat-content h3 {
   font-size: var(--text-xs);
   color: var(--color-text-secondary);
-  margin: 0 0 var(--space-2) 0;
+  margin: 0 0 var(--space-1) 0;
   font-weight: var(--font-medium);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
 .stat-value {
-  font-size: var(--text-3xl);
-  font-weight: var(--font-bold);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-black);
   margin: 0;
-  color: var(--color-text-primary);
   line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 

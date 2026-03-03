@@ -23,7 +23,7 @@ const ApplicationCard = ({ application, onEdit, onDelete }) => {
     };
 
     return (
-        <div className="application-card">
+        <div className="application-card" data-status={application.status}>
             <div className="card-header">
                 <h3>{application.company}</h3>
                 <span className={`status-badge ${getStatusClass(application.status)}`}>
