@@ -1163,6 +1163,307 @@ body {
 
 
 /* ============================================
+   FILTER PANEL
+   Similar pattern to Modal but positioned differently.
+   Uses portal rendering to avoid z-index issues.
+   ============================================ */
+
+/* Overlay backdrop — same as modal and sidebar patterns */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s var(--ease-out-quart) backwards;
+}
+
+/* Panel card — centered on desktop, bottom sheet on mobile */
+.filter-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 90%;
+  max-width: 450px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: filterSlideIn 0.3s var(--ease-out-expo) backwards;
+}
+
+/* Slide + scale animation for polished entrance */
+@keyframes filterSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header with title and close button */
+.filter-panel-header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.filter-panel-header h3 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.filter-close-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-close-btn:hover {
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+.filter-close-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Scrollable body area */
+.filter-panel-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Each logical section (Sort, Time Range, Status) */
+.filter-section {
+  margin-bottom: var(--space-6);
+}
+
+/* Add border separator between sections */
+.filter-section + .filter-section {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-6);
+}
+
+/* Section label styling */
+.filter-section-label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-3);
+}
+
+/* Radio button group */
+.filter-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Radio option row */
+.filter-radio-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.filter-radio-option:hover {
+  background: var(--color-bg-subtle);
+}
+
+/* Radio input styling */
+.filter-radio-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.filter-radio-option span {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+/* Tri-state status filter group */
+.filter-tristate-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Tri-state button (neutral/include/exclude) */
+.filter-tristate-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition-base);
+  text-align: left;
+  width: 100%;
+  font-family: var(--font-family);
+}
+
+.filter-tristate-option:hover {
+  background: var(--color-bg-subtle);
+}
+
+.filter-tristate-option:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Icon wrapper */
+.filter-tristate-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-border);
+}
+
+/* Label text */
+.filter-tristate-label {
+  flex: 1;
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+/* Hint text (changes based on state) */
+.filter-tristate-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-normal);
+}
+
+/* State-specific styling */
+.filter-tristate-neutral {
+  /* Default state - no special styling */
+}
+
+.filter-tristate-include {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.filter-tristate-include:hover {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.filter-tristate-include .filter-tristate-hint {
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+}
+
+.filter-tristate-exclude {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.filter-tristate-exclude:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.filter-tristate-exclude .filter-tristate-hint {
+  color: var(--color-error);
+  font-weight: var(--font-medium);
+}
+
+/* Footer with action buttons */
+.filter-panel-footer {
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--color-border-light);
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.filter-panel-footer button {
+  flex: 1;
+}
+
+/* Filter button (triggers panel) */
+.btn-filter {
+  position: relative;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: var(--transition-base);
+  font-family: var(--font-family);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-filter:hover {
+  background: var(--color-bg-subtle);
+  border-color: var(--color-primary);
+}
+
+.btn-filter:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-filter:active {
+  transform: scale(0.98);
+}
+
+/* Active filter count badge */
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  line-height: 1;
+}
+
+
+/* ============================================
    STATS GRID
    ============================================ */
 
@@ -1565,6 +1866,47 @@ body {
     max-width: 100%;
     max-height: 92vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  /* Filter panel: bottom sheet */
+  .filter-overlay {
+    align-items: flex-end;
+  }
+
+  .filter-panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  /* Slide up from bottom animation on mobile */
+  @keyframes filterSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Larger touch targets for mobile */
+  .filter-radio-option,
+  .filter-tristate-option {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  /* Reduced padding on mobile */
+  .filter-panel-body {
+    padding: var(--space-5);
+  }
+
+  .filter-panel-header,
+  .filter-panel-footer {
+    padding: var(--space-4) var(--space-5);
   }
 
   /* Empty state features: wrap on narrow screens */

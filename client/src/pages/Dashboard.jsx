@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { applicationAPI } from "../services/api";
 import ApplicationForm from '../components/ApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
+import FilterPanel from '../components/FilterPanel';
 import { useToast } from '../context/ToastContext';
 import LoadingBoundary from '../components/LoadingBoundary';
 import Modal from '../components/Modal';
@@ -66,21 +67,45 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingApplication, setEditingApplication] = useState(null);
-    const [filterStatus, setFilterStatus] = useState('All');
     const [searchKeyword, setSearchKeyword] = useState('');
     const { toastSuccess, toastError } = useToast();
     const [formModal, setFormModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState({ open: false, appId: null });
 
-    const statusOptions = [
-        'All',
-        'Applied',
-        'Phone Screen',
-        'Technical Interview',
-        'Onsite',
-        'Offer',
-        'Rejected'
-    ];
+    /* ── Filter state and panel control ── */
+    const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+    const [filters, setFilters] = useState({
+        statusFilters: {
+            'Applied': 'neutral',
+            'Phone Screen': 'neutral',
+            'Technical Interview': 'neutral',
+            'Onsite': 'neutral',
+            'Offer': 'neutral',
+            'Rejected': 'neutral'
+        },
+        timeRange: 'all',       // Default to all time
+        sortBy: 'date',         // Default sort by date applied
+        sortOrder: 'desc'       // Newest first
+    });
+
+    /* ── Helper: Calculate date cutoff for time range filters ── */
+    const getTimeRangeDate = (range) => {
+        const now = new Date();
+        switch (range) {
+            case 'week':
+                return new Date(now.setDate(now.getDate() - 7));
+            case 'month':
+                return new Date(now.setMonth(now.getMonth() - 1));
+            case '3months':
+                return new Date(now.setMonth(now.getMonth() - 3));
+            case '6months':
+                return new Date(now.setMonth(now.getMonth() - 6));
+            case 'year':
+                return new Date(now.setFullYear(now.getFullYear() - 1));
+            default:
+                return null; // 'all' = no filter
+        }
+    };
 
     const fetchApplications = useCallback(async () => {
         try {
@@ -158,22 +183,91 @@ const Dashboard = () => {
 
     const handleClearFilters = () => {
         setSearchKeyword('');
-        setFilterStatus('All');
+        setFilters({
+            statusFilters: {
+                'Applied': 'neutral',
+                'Phone Screen': 'neutral',
+                'Technical Interview': 'neutral',
+                'Onsite': 'neutral',
+                'Offer': 'neutral',
+                'Rejected': 'neutral'
+            },
+            timeRange: 'all',
+            sortBy: 'date',
+            sortOrder: 'desc'
+        });
     };
 
-    const filteredApplications = filterStatus === 'All'
-        ? applications
-        : applications.filter(app => app.status === filterStatus);
+    /* ── Apply all filters and sorting ── */
+    const getFilteredApplications = () => {
+        let result = [...applications];
 
-    const searchedApplications = searchKeyword === ''
-        ? filteredApplications
-        : filteredApplications.filter(app => {
+        // 1. Filter by time range
+        if (filters.timeRange !== 'all') {
+            const cutoffDate = getTimeRangeDate(filters.timeRange);
+            result = result.filter(app =>
+                new Date(app.appliedDate) >= cutoffDate
+            );
+        }
+
+        // 2. Filter by status (tri-state: neutral/include/exclude)
+        const statusStates = Object.entries(filters.statusFilters);
+        const hasIncludes = statusStates.some(([_, state]) => state === 'include');
+
+        if (hasIncludes) {
+            // If any "include" exists, ONLY show those statuses
+            result = result.filter(app =>
+                filters.statusFilters[app.status] === 'include'
+            );
+        } else {
+            // Otherwise, just filter out "exclude" statuses
+            result = result.filter(app =>
+                filters.statusFilters[app.status] !== 'exclude'
+            );
+        }
+
+        // 3. Filter by search keyword
+        if (searchKeyword.trim() !== '') {
             const searchLower = searchKeyword.toLowerCase();
-            return (
+            result = result.filter(app =>
                 app.company.toLowerCase().includes(searchLower) ||
                 app.position.toLowerCase().includes(searchLower)
             );
+        }
+
+        // 4. Sort
+        result.sort((a, b) => {
+            if (filters.sortBy === 'date') {
+                const dateA = new Date(a.appliedDate);
+                const dateB = new Date(b.appliedDate);
+                return filters.sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+            } else {
+                // Sort by company name (alphabetical)
+                const comparison = a.company.localeCompare(b.company);
+                return filters.sortOrder === 'desc' ? -comparison : comparison;
+            }
         });
+
+        return result;
+    };
+
+    const filteredApplications = getFilteredApplications();
+
+    /* ── Calculate active filter count for badge ── */
+    const statusFilterCount = Object.values(filters.statusFilters).filter(
+        state => state !== 'neutral'
+    ).length;
+
+    const activeFilterCount =
+        statusFilterCount +
+        (filters.timeRange !== 'all' ? 1 : 0) +
+        (filters.sortBy !== 'date' || filters.sortOrder !== 'desc' ? 1 : 0);
+
+    /* ── Apply filters and close panel ── */
+    const handleApplyFilters = () => {
+        setFilterPanelOpen(false);
+        // Filters are already applied via getFilteredApplications()
+    };
 
     return (
         <div className="dashboard">
@@ -237,7 +331,7 @@ const Dashboard = () => {
 
                         <div className="applications-section">
                             <div className="section-header">
-                                <h2>Your Applications <span className="section-count">{searchedApplications.length}</span></h2>
+                                <h2>Your Applications <span className="section-count">{filteredApplications.length}</span></h2>
                                 <div className="search-filter">
                                     <input
                                         type="text"
@@ -248,35 +342,33 @@ const Dashboard = () => {
                                     />
                                 </div>
 
-                                <div className="filter-group">
-                                    <label htmlFor="status-filter">Filter by status:</label>
-                                    <select
-                                        id="status-filter"
-                                        value={filterStatus}
-                                        onChange={(e) => setFilterStatus(e.target.value)}
-                                    >
-                                        {statusOptions.map(status => (
-                                            <option key={status} value={status}>{status}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                                <button
+                                    className="btn-filter"
+                                    onClick={() => setFilterPanelOpen(true)}
+                                    aria-label="Open filter and sort options"
+                                >
+                                    Filter & Sort
+                                    {activeFilterCount > 0 && (
+                                        <span className="filter-badge">{activeFilterCount}</span>
+                                    )}
+                                </button>
                             </div>
 
-                            {searchedApplications.length === 0 ? (
+                            {filteredApplications.length === 0 ? (
                                 /* ── No-results state ───────────────────────────────── */
                                 <div className="no-results-state">
                                     <div className="no-results-icon" aria-hidden="true">
                                         <SearchIcon />
                                     </div>
-                                    <h3>No applications match your search</h3>
-                                    <p>Try different keywords or adjust the status filter.</p>
+                                    <h3>No applications match your filters</h3>
+                                    <p>Try adjusting your search or filter criteria.</p>
                                     <button onClick={handleClearFilters} className="btn-secondary">
-                                        Clear filters
+                                        Clear all filters
                                     </button>
                                 </div>
                             ) : (
                                 <div className="applications-grid">
-                                    {searchedApplications.map(application => (
+                                    {filteredApplications.map(application => (
                                         <ApplicationCard
                                             key={application._id}
                                             application={application}
@@ -290,7 +382,15 @@ const Dashboard = () => {
                     </>
                 )}
 
-                {/* Modals — always rendered, gated by isOpen */}
+                {/* Modals and panels — always rendered, gated by isOpen */}
+                <FilterPanel
+                    isOpen={filterPanelOpen}
+                    onClose={() => setFilterPanelOpen(false)}
+                    onApply={handleApplyFilters}
+                    filters={filters}
+                    onFilterChange={setFilters}
+                />
+
                 <Modal
                     isOpen={formModal}
                     onClose={closeFormModal}
