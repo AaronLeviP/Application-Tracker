@@ -1289,52 +1289,227 @@ body {
    RESPONSIVE
    ============================================ */
 
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
+/* --- Tablet (768px – 1023px) --------------------------------- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --sidebar-width: 210px;
   }
 
   .main-content {
-    margin-left: 0;
+    padding: var(--space-6);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-header h1,
+  .analytics-header h1 {
+    font-size: var(--text-3xl);
+  }
+}
+
+/* --- Mobile (≤ 767px) ---------------------------------------- */
+@media (max-width: 767px) {
+  body {
+    min-width: 320px;
+  }
+
+  /* Sidebar → sticky top navigation bar */
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .sidebar-header {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: none;
+    flex-shrink: 0;
   }
 
   .sidebar-nav {
     display: flex;
+    flex: 1;
     flex-direction: row;
     padding: var(--space-2);
+    align-items: center;
   }
 
   .nav-item {
     flex: 1;
     justify-content: center;
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: 0;
   }
 
-  .applications-grid {
-    grid-template-columns: 1fr;
+  /* Sidebar footer: hide name/email, keep logout compact */
+  .sidebar-footer {
+    padding: var(--space-2) var(--space-3);
+    border-top: none;
+    border-left: 1px solid var(--color-sidebar-border);
   }
 
-  .section-header {
+  .user-info {
+    display: none;
+  }
+
+  .logout-btn {
+    width: auto;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  /* Main content */
+  .main-content {
+    margin-left: 0;
+    padding: var(--space-4);
+    padding-bottom: var(--space-10);
+  }
+
+  /* Page headers */
+  .dashboard-header {
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
   }
 
-  .dashboard-header h1 {
+  .dashboard-header h1,
+  .analytics-header h1 {
     font-size: var(--text-3xl);
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .dashboard-header p,
+  .analytics-header p {
+    font-size: var(--text-base);
   }
 
+  .header-actions {
+    width: 100%;
+  }
+
+  /* Stats: 2×2 grid uses horizontal space better than 1-column */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .stat-card {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .stat-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .stat-value {
+    font-size: var(--text-3xl);
+  }
+
+  /* Charts: single column */
   .charts-grid {
     grid-template-columns: 1fr;
   }
 
+  /* Cards: single column */
+  .applications-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Section header: stretch controls full-width */
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .search-filter {
+    max-width: 100%;
+  }
+
+  /* Timeline bar: tighter label column */
   .timeline-bar {
-    grid-template-columns: 80px 1fr 40px;
+    grid-template-columns: 70px 1fr 36px;
     gap: var(--space-2);
+  }
+
+  /* Toast: bottom of screen, full width */
+  .toast-container {
+    top: auto;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .toast {
+    min-width: unset;
+    width: 100%;
+  }
+
+  /* Modal: bottom sheet on mobile */
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  /* Empty state features: wrap on narrow screens */
+  .empty-state-features {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .empty-state {
+    padding: var(--space-10) var(--space-4);
+  }
+}
+
+/* --- Small phone (≤ 479px) ----------------------------------- */
+@media (max-width: 479px) {
+  .sidebar-header h2 {
+    font-size: var(--text-sm);
+    letter-spacing: 0;
+  }
+
+  .nav-item {
+    font-size: var(--text-sm);
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .dashboard-header h1,
+  .analytics-header h1 {
+    font-size: var(--text-2xl);
+  }
+
+  /* Stack stats to 1 column on very small phones */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-value {
+    font-size: var(--text-2xl);
+  }
+
+  .modal-content {
+    max-height: 96vh;
   }
 }
 
