@@ -122,7 +122,7 @@ const Dashboard = () => {
             toastSuccess("Application updated successfully!");
             setFormModal(false);
         } catch (err) {
-            toastError("Failed to update application");
+            toastError("Failed to update application.");
         }
     };
 

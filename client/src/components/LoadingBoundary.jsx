@@ -2,19 +2,15 @@ const LoadingBoundary = ({
     loading,
     error,
     onRetry,
-    // data,
     loadingComponent = <div className="loading">Loading...</div>,
     errorComponent = null,
-    // emptyComponent = <div className="empty-state">No data found</div>,
     children
 }) => {
-    // Loading state
-    if(loading) {
+    if (loading) {
         return loadingComponent;
     }
 
-    // Error state
-    if(error){
+    if (error) {
         return errorComponent || (
             <div className="error-state">
                 <p>{error}</p>
@@ -26,11 +22,6 @@ const LoadingBoundary = ({
             </div>
         );
     }
-
-    // // Empty state
-    // if(!data || ((Array.isArray(data) && data.length === 0))) {
-    //     return emptyComponent;
-    // }
 
     return children;
 }

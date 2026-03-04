@@ -4,7 +4,7 @@ const TimelineChart = ({ applications }) => {
     const minDate = new Date(Math.min(...dates));
     const maxDate = new Date(Math.max(...dates));
 
-    // Lock dats to 1st of month to prevent day-overflow
+    // Lock dates to 1st of month to prevent day-overflow
     minDate.setDate(1);
     maxDate.setDate(1);
 

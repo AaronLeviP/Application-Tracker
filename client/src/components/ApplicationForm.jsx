@@ -116,7 +116,7 @@ const ApplicationForm = ({ onSubmit, editingApplication, onCancel }) => {
                     name="position"
                     value={formData.position}
                     onChange={handleChange}
-                    placeholder="e.g. Software Engineer"
+                    placeholder="e.g., Software Engineer"
                     aria-describedby={formErrors.position ? 'position-error' : undefined}
                     aria-invalid={!!formErrors.position}
                 />

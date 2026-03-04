@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -25,40 +26,84 @@ const AnalyticsIcon = () => (
     </svg>
 );
 
+const HamburgerIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+);
+
+const CloseIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+);
+
 /* ── Component ─────────────────────────────────────────────────── */
 
 const DashboardLayout = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
 
+    const closeSidebar = () => setSidebarOpen(false);
+
     return (
         <div className="dashboard-layout">
-            <aside className="sidebar">
+
+            {/* Mobile-only sticky top bar */}
+            <header className="mobile-topbar">
+                <button
+                    className="hamburger-btn"
+                    onClick={() => setSidebarOpen(o => !o)}
+                    aria-label="Open navigation"
+                    aria-expanded={sidebarOpen}
+                    aria-controls="main-sidebar"
+                >
+                    <HamburgerIcon />
+                </button>
+                <span className="mobile-app-name">Interview Prep</span>
+            </header>
+
+            {/* Backdrop — click to close drawer */}
+            {sidebarOpen && (
+                <div
+                    className="sidebar-overlay"
+                    onClick={closeSidebar}
+                    aria-hidden="true"
+                />
+            )}
+
+            <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`} id="main-sidebar">
                 <div className="sidebar-header">
                     <h2>Interview Prep</h2>
+                    <button
+                        className="sidebar-close-btn"
+                        onClick={closeSidebar}
+                        aria-label="Close navigation"
+                    >
+                        <CloseIcon />
+                    </button>
                 </div>
 
                 <nav className="sidebar-nav" aria-label="Main navigation">
-                    <NavLink
-                        to="/dashboard"
-                        end
-                        className="nav-item"
-                        aria-current={({ isActive }) => isActive ? 'page' : undefined}
-                    >
+                    <NavLink to="/dashboard" end className="nav-item" onClick={closeSidebar}>
                         <DashboardIcon />
                         Dashboard
                     </NavLink>
 
-                    <NavLink
-                        to="/dashboard/analytics"
-                        className="nav-item"
-                        aria-current={({ isActive }) => isActive ? 'page' : undefined}
-                    >
+                    <NavLink to="/dashboard/analytics" className="nav-item" onClick={closeSidebar}>
                         <AnalyticsIcon />
                         Analytics
                     </NavLink>

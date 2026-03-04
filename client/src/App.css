@@ -380,6 +380,27 @@ body {
   background-color: var(--color-error-dark);
 }
 
+/* Disabled state — visual feedback during async operations */
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled,
+.btn-edit:disabled,
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Keyboard focus rings */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-danger:focus-visible,
+.btn-edit:focus-visible,
+.btn-delete:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .form-buttons {
   display: flex;
   justify-content: space-between;
@@ -456,6 +477,18 @@ body {
   border-radius: var(--radius-sm);
   font-size: var(--text-base);
   font-family: var(--font-family);
+}
+
+.search-filter input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
 }
 
 .applications-grid {
@@ -714,21 +747,6 @@ body {
   margin-top: var(--space-2);
 }
 
-.empty-state {
-  text-align: center;
-  padding: var(--space-20) var(--space-5);
-  color: var(--color-text-secondary);
-}
-
-.empty-state h3 {
-  margin: 0 0 var(--space-2) 0;
-  color: var(--color-text-primary);
-}
-
-.empty-state p {
-  margin: 0 0 var(--space-5) 0;
-}
-
 
 /* ============================================
    AUTH PAGES
@@ -870,6 +888,11 @@ body {
   font-weight: var(--font-semibold);
 }
 
+.nav-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
 /* Sidebar Footer */
 .sidebar-footer {
   padding: var(--space-5);
@@ -913,6 +936,11 @@ body {
   background: var(--color-sidebar-logout-hover);
 }
 
+.logout-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
 /* Main Content */
 .main-content {
   margin-left: var(--sidebar-width);
@@ -920,6 +948,71 @@ body {
   padding: var(--space-10);
   background: var(--color-bg-page);
   min-height: 100vh;
+}
+
+/* Mobile navigation controls — hidden on desktop, shown via media query */
+.mobile-topbar {
+  display: none;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: var(--color-sidebar-text-active);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+  font-family: var(--font-family);
+}
+
+.hamburger-btn:hover {
+  background: var(--color-sidebar-hover-bg);
+}
+
+.hamburger-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+.mobile-app-name {
+  font-weight: var(--font-black);
+  font-size: var(--text-base);
+  color: var(--color-sidebar-text-active);
+  letter-spacing: -0.01em;
+}
+
+/* Close button inside the drawer — hidden on desktop */
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-sidebar-text);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+  font-family: var(--font-family);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-close-btn:hover {
+  background: var(--color-sidebar-hover-bg);
+  color: var(--color-sidebar-text-active);
+}
+
+.sidebar-close-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+/* Backdrop overlay — only active when drawer is open */
+.sidebar-overlay {
+  display: none;
 }
 
 
@@ -1047,6 +1140,11 @@ body {
 .modal-close:hover {
   background: var(--color-bg-page);
   color: var(--color-text-primary);
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .modal-body {
@@ -1242,7 +1340,6 @@ body {
   height: 100%;
   border-radius: var(--radius-sm);
   transition: width 0.5s ease;
-  min-width: var(--space-8);
 }
 
 .bar-value {
@@ -1315,61 +1412,61 @@ body {
     min-width: 320px;
   }
 
-  /* Sidebar → sticky top navigation bar */
-  .dashboard-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
+  /* Show mobile top bar */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-sidebar-bg);
     position: sticky;
     top: 0;
     z-index: 100;
-    flex-direction: row;
-    align-items: center;
   }
 
+  /* Sidebar: fixed off-screen drawer, slides in from the left */
+  .dashboard-layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: calc(-1 * var(--sidebar-width));
+    height: 100vh;
+    width: var(--sidebar-width);
+    z-index: 200;
+    transition: left 0.28s var(--ease-out-expo);
+  }
+
+  .sidebar.sidebar-open {
+    left: 0;
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Sidebar header: flex row to fit brand name + close button */
   .sidebar-header {
-    padding: var(--space-3) var(--space-4);
-    border-bottom: none;
-    flex-shrink: 0;
-  }
-
-  .sidebar-nav {
     display: flex;
-    flex: 1;
-    flex-direction: row;
-    padding: var(--space-2);
+    justify-content: space-between;
     align-items: center;
   }
 
-  .nav-item {
-    flex: 1;
-    justify-content: center;
-    padding: var(--space-2) var(--space-3);
-    margin-bottom: 0;
+  /* Show close button inside the drawer */
+  .sidebar-close-btn {
+    display: flex;
   }
 
-  /* Sidebar footer: hide name/email, keep logout compact */
-  .sidebar-footer {
-    padding: var(--space-2) var(--space-3);
-    border-top: none;
-    border-left: 1px solid var(--color-sidebar-border);
+  /* Backdrop overlay */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 199;
+    animation: fadeIn 0.2s var(--ease-out-quart) both;
   }
 
-  .user-info {
-    display: none;
-  }
-
-  .logout-btn {
-    width: auto;
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-  }
-
-  /* Main content */
+  /* Main content: full viewport width, no left offset */
   .main-content {
     margin-left: 0;
     padding: var(--space-4);
@@ -1398,7 +1495,7 @@ body {
     width: 100%;
   }
 
-  /* Stats: 2×2 grid uses horizontal space better than 1-column */
+  /* Stats: 2×2 grid */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);
@@ -1458,7 +1555,7 @@ body {
     width: 100%;
   }
 
-  /* Modal: bottom sheet on mobile */
+  /* Modal: bottom sheet */
   .modal-overlay {
     align-items: flex-end;
   }
@@ -1483,23 +1580,11 @@ body {
 
 /* --- Small phone (≤ 479px) ----------------------------------- */
 @media (max-width: 479px) {
-  .sidebar-header h2 {
-    font-size: var(--text-sm);
-    letter-spacing: 0;
-  }
-
-  .nav-item {
-    font-size: var(--text-sm);
-    gap: var(--space-2);
-    padding: var(--space-2);
-  }
-
   .dashboard-header h1,
   .analytics-header h1 {
     font-size: var(--text-2xl);
   }
 
-  /* Stack stats to 1 column on very small phones */
   .stats-grid {
     grid-template-columns: 1fr;
   }
