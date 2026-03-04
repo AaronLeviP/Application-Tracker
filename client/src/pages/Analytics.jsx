@@ -160,8 +160,8 @@ const Analytics = () => {
                                 title="Offers"
                                 value={stats.offers}
                                 icon={<StarIcon />}
-                                color="#16a34a"
-                                iconBg="rgba(22, 163, 74, 0.1)"
+                                color="#22c55e"
+                                iconBg="rgba(34, 197, 94, 0.12)"
                             />
                         </div>
 

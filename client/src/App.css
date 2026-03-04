@@ -7,19 +7,20 @@
   /* --- Colors: Brand --- */
   --color-primary: #3b82f6;
   --color-primary-dark: #1d4ed8;
+  --color-primary-light: #60a5fa;
   --color-primary-muted: rgba(59, 130, 246, 0.12);
 
-  /* --- Colors: Neutral --- */
-  --color-bg-page: #eef2fa;
-  --color-bg-subtle: #f9fafb;
-  --color-surface: #ffffff;
-  --color-border: #d1d5db;
-  --color-border-light: #e5e7eb;
+  /* --- Colors: Neutral (warm-tinted for approachability) --- */
+  --color-bg-page: #f0f4fb;       /* More saturated blue background */
+  --color-bg-subtle: #faf9f8;     /* Subtle warm tint */
+  --color-surface: #fffffe;       /* Off-white with warmth */
+  --color-border: #d4d2cf;        /* Warm-tinted border */
+  --color-border-light: #e8e6e3;  /* Warm-tinted light border */
 
-  /* --- Colors: Text --- */
-  --color-text-primary: #1f2937;
-  --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
+  /* --- Colors: Text (warm-tinted) --- */
+  --color-text-primary: #1f2937;  /* Keep strong for contrast */
+  --color-text-secondary: #6e6b68; /* Warm gray */
+  --color-text-tertiary: #a09d9a;  /* Warm light gray */
 
   /* --- Colors: Sidebar --- */
   --color-sidebar-bg: #1e293b;
@@ -63,7 +64,7 @@
   --status-rejected-text:  #ffffff;
   --status-phone-bg:       #7c3aed;
   --status-phone-text:     #ffffff;
-  --status-default-bg:     #6b7280;
+  --status-default-bg:     #6e6b68;        /* Warm-tinted gray */
   --status-default-text:   #ffffff;
 
   /* --- Spacing (4px base scale) --- */
@@ -176,12 +177,26 @@ body {
   margin-top: var(--space-5);
   margin-bottom: var(--space-10);
   padding: var(--space-5);
-  background: var(--color-surface);
+  background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg-subtle) 100%);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border-top: 3px solid var(--color-primary);
   overflow: hidden;
   animation: fadeInUp 0.4s var(--ease-out-quart) backwards;
+  position: relative;
+}
+
+.dashboard-header::before,
+.analytics-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10%;
+  width: 40%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, var(--color-primary-muted) 0%, transparent 70%);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .dashboard-header {
