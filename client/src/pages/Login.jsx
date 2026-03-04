@@ -8,8 +8,8 @@ const Login = () => {
         password: ''
     });
 
-    const[error, setError] = useState('');
-    const[loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
@@ -72,7 +72,7 @@ const Login = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn-primary" disabled={loading}>
+                    <button type="submit" className="btn-primary btn-block" disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
                     

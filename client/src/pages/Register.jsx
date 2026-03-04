@@ -10,8 +10,8 @@ const Register = () => {
         confirmPassword: ''
     });
 
-    const[error, setError] = useState('');
-    const[loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const { register } = useAuth();
     const navigate = useNavigate();
@@ -23,29 +23,32 @@ const Register = () => {
         });
     };
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setLoading(true);
 
-        // FrontEnd validation
-        if(formData.password !== formData.confirmPassword) {
+        // Frontend validation
+        if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
+            setLoading(false);
             return;
         }
 
-        if(formData.password.length < 6){
+        if (formData.password.length < 6) {
             setError('Password must be at least 6 characters');
+            setLoading(false);
             return;
         }
 
-        if(!/[A-Z]/.test(formData.password)){
+        if (!/[A-Z]/.test(formData.password)) {
             setError('Password must contain at least one uppercase letter');
+            setLoading(false);
             return;
         }
 
         if (!/[0-9]/.test(formData.password)) {
             setError('Password must contain at least one number');
+            setLoading(false);
             return;
         }
 
@@ -124,7 +127,7 @@ const Register = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn-primary" disabled={loading}>
+                    <button type="submit" className="btn-primary btn-block" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Register'}
                     </button>
                     

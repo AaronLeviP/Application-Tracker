@@ -26,14 +26,8 @@ function App() {
                   <DashboardLayout />
                 </ProtectedRoute>
               }>
-                {/* Nested routes - render inside <Outlet /> */}
                 <Route index element={<Dashboard />} />
                 <Route path="analytics" element={<Analytics />} />
-
-                {/* Add more routes here as you build features:
-                <Route path="settings" element={<Settings />} />
-                */}
-                
               </Route>
 
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
