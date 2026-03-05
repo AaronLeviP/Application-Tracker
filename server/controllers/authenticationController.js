@@ -81,10 +81,65 @@ exports.getCurrentUser = async (req, res, next) => {
         const user = await User.findById(req.user.id).select('-password');
 
         if(!user) {
-            return  res.status(404).json({ message: 'User not found. '});
+            return  res.status(404).json({ message: 'User not found.'});
         }
 
         res.json({ user });
+    } catch (error) {
+        next(error);
+    }
+}
+
+exports.updateProfile = async (req, res, next) => {
+    try {
+        const { name, email } = req.body;
+
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        if (email !== user.email) {
+            const existingUser = await User.findOne({ email });
+
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already in use.' });
+            }
+        }
+
+        user.name = name;
+        user.email = email;
+        await user.save();
+
+        res.status(202).json({
+            message: 'Profile updated successfully',
+            user: { id: user._id, name: user.name, email: user.email }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.changePassword = async (req, res, next) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const isValid = await user.comparePassword(currentPassword);
+        if (!isValid) {
+            return res.status(401).json({ message: 'Current password is incorrect '});
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.status(202).json({ message: 'Password changed successfully '});
     } catch (error) {
         next(error);
     }
