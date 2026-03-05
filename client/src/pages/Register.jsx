@@ -58,7 +58,15 @@ const Register = () => {
             await register(formData.name, formData.email, formData.password);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            if(err?.response?.data?.errors) {
+                const errorList = err.response.data.errors
+                    .map(error => error.message)
+                    .join('\n');
+                    
+                setError(errorList);
+            } else {
+                setError('Registration failed. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
